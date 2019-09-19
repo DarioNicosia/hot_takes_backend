@@ -10,13 +10,13 @@ exports.signup =(req,res,next)=>{
             });
            user.save().then(
             ()=>{
-                req.status(201).json({
+                res.status(201).json({
                     message:'user added succesfully'
                 })
             }   
            ).catch(
                (error)=>{
-                   req.status(500).json({
+                   res.status(500).json({
                        error:error
                    });
                }
@@ -25,8 +25,39 @@ exports.signup =(req,res,next)=>{
     );
 };
 
-exports.login =(req,re,next)=>{
-
-
-    
+exports.login =(req,res,next)=>{
+  User.findOne({email:req.body.email}).then(
+      (user)=>{
+          if(!user){
+              return res.status(401).json({
+                  error:new Error('user not found')
+              })
+          }
+        bcrypt.compare(req.body.password,user.password).then(
+            (valid)=>{
+                if(!valid){
+                    return res.status(401).json({
+                        error: new Error('invalid password')
+                    })
+                }
+                res.status(201).json({
+                    userId: user._id,
+                    token:'token'
+                })
+            }
+        ).catch(
+            (error)=>{
+                res.status(500).json({
+                    error:error
+                })
+            }
+        )
+      }
+  ).catch(
+      (error)=>{
+          res.status(500).json({
+              error:error
+          })
+      }
+  )
 }

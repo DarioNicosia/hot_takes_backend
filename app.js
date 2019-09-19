@@ -4,11 +4,11 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const mongoose = require('mongoose');
 const app = express()
 
 //connect to MONGODB - npm install --save mongoose
-const mongoose = require('mongoose');
+
 mongoose.connect('mongodb+srv://dario:uQ2tb9ESYdyZ292x@cluster0-kqqh5.mongodb.net/test?retryWrites=true&w=majority')
 .then(() => {
   console.log('Successfully connected to MongoDB Atlas!');

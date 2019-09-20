@@ -1,14 +1,16 @@
 const Sauce = require('../models/sauce');
 
 exports.createSauce = (res,req,next)=>{
+  const url = req.protocol + '://' + req.get('host');
+  req.body.sauce = JSON.parse(req.body.sauce);  
   const sauce = new Sauce({
-    userId:req.body.userId,
-    name:req.body.name,
-    manufacturer:req.body.manufacturer,
-    description:req.body.description,
-    mainPepper:req.body.mainPepper,
-    imageUrl:req.body.imageUrl,
-    heat:req.body.heat,
+    userId:req.body.sauce.userId,
+    name:req.body.sauce.name,
+    manufacturer:req.body.sauce.manufacturer,
+    description:req.body.sauce.description,
+    mainPepper:req.body.sauce.mainPepper,
+    imageUrl:url + '/images/' + req.file.filename,
+    heat:req.body.sauce.heat,
     likes:0,
     dislikes:0,
     usersLiked:[],
@@ -29,4 +31,3 @@ exports.createSauce = (res,req,next)=>{
   );
 };
 
-console.log(createSauce);

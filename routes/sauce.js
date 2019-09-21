@@ -6,5 +6,6 @@ const sauceCtrl = require('../controllers/sauce');
 
 router.post('/', multer, sauceCtrl.createSauce);
 router.get('/',sauceCtrl.getAllSauces);
+router.get('/:id',sauceCtrl.getOneSauce);
 
 module.exports = router;

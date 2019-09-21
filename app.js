@@ -1,6 +1,8 @@
 //password mongodb: uQ2tb9ESYdyZ292x
 //connect MONGODB: mongodb+srv://dario:<password>@cluster0-kqqh5.mongodb.net/test?retryWrites=true&w=majority
 
+//new password:mXFlD2ghGxIELZqU
+//new connect mongoDB: mongodb+srv://dario_1:<password>@cluster0-uvmcg.mongodb.net/test?retryWrites=true&w=majority
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -14,7 +16,7 @@ const app = express()
 
 //connect to MONGODB - npm install --save mongoose
 
-mongoose.connect('mongodb+srv://dario:uQ2tb9ESYdyZ292x@cluster0-kqqh5.mongodb.net/test?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://dario_1:mXFlD2ghGxIELZqU@cluster0-uvmcg.mongodb.net/test?retryWrites=true&w=majority')
 .then(() => {
   console.log('Successfully connected to MongoDB Atlas!');
 })
@@ -33,8 +35,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());  
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
-
-app.use('/api/auth',userRoutes);
+app.use('/api/auth', userRoutes)
 app.use('/api/sauces',sauceRoutes)
 
 

@@ -111,3 +111,19 @@ exports.modifySauce =(req,res,next)=>{
     }
   )
 }
+
+exports.deleteSauce = (req,res,next)=>{
+  Sauce.deleteOne({_id:req.params.id}).then(
+    ()=>{
+      res.status(200).json({
+        message:'sauce deleted'
+      })
+    }
+  ).catch(
+    (error)=>{
+      res.status(400).json({
+        error:error
+      })
+    }
+  )
+}

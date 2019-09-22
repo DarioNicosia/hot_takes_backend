@@ -1,4 +1,6 @@
 const Sauce = require('../models/sauce');
+const fs = require('fs');
+
 
 exports.createSauce = (req,res,next)=>{
   req.body.sauce = JSON.parse(req.body.sauce);   
@@ -82,9 +84,10 @@ exports.modifySauce =(req,res,next)=>{
     usersLiked:[],
     usersDisliked:[]
   };
-  }else{
-    sauce ={
+  } else {
+    sauce = {
     _id:req.params.id,
+    userId:req.body.userId,
     name:req.body.name,
     manufacturer:req.body.manufacturer,
     description:req.body.description,
@@ -107,16 +110,32 @@ exports.modifySauce =(req,res,next)=>{
     (error)=>{
       res.status(400).json({
         error:error
-      })
+      });
     }
-  )
-}
+  );
+};
+
+
+
 
 exports.deleteSauce = (req,res,next)=>{
-  Sauce.deleteOne({_id:req.params.id}).then(
-    ()=>{
-      res.status(200).json({
-        message:'sauce deleted'
+  Sauce.findOne({_id:req.params.id}).then(
+    (sauce)=>{
+      const filename = sauce.imageUrl.split('/images/')[1]
+      fs.unlink('images/'+ filename, ()=>{
+        Sauce.deleteOne({_id:req.params.id}).then(
+          ()=>{
+            res.status(200).json({
+              message:'sauce deleted'
+            })
+          }
+        ).catch(
+          (error)=>{
+            res.status(400).json({
+              error:error
+            })
+          }
+        )
       })
     }
   ).catch(
@@ -126,4 +145,5 @@ exports.deleteSauce = (req,res,next)=>{
       })
     }
   )
-}
+  
+};

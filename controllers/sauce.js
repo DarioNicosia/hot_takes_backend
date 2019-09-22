@@ -92,7 +92,6 @@ exports.modifySauce =(req,res,next)=>{
     manufacturer:req.body.manufacturer,
     description:req.body.description,
     mainPepper:req.body.mainPepper,
-    imageUrl:req.body.imageUrl,
     heat:req.body.heat,
     likes:'0',
     dislikes:'0',

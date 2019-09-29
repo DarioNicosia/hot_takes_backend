@@ -13,10 +13,10 @@ exports.createSauce = (req,res,next)=>{
     mainPepper:req.body.sauce.mainPepper,
     imageUrl:url + '/images/' + req.file.filename,
     heat:req.body.sauce.heat,
-    likes:'0',
-    dislikes:'0',
-    usersLiked:[],
-    usersDisliked:[]
+    likes:0,
+    dislikes:0,
+    usersLiked:[ ],
+    usersDisliked:[ ]
   });
   sauce.save().then(
       ()=>{
@@ -79,10 +79,7 @@ exports.modifySauce =(req,res,next)=>{
     mainPepper:req.body.sauce.mainPepper,
     imageUrl:url + '/images/' + req.file.filename,
     heat:req.body.sauce.heat,
-    likes:'0',
-    dislikes:'0',
-    usersLiked:[],
-    usersDisliked:[]
+    
   };
   } else {
     sauce = {
@@ -93,10 +90,7 @@ exports.modifySauce =(req,res,next)=>{
     description:req.body.description,
     mainPepper:req.body.mainPepper,
     heat:req.body.heat,
-    likes:'0',
-    dislikes:'0',
-    usersLiked:[],
-    usersDisliked:[]
+    
   }
 }
   Sauce.updateOne({_id:req.params.id},sauce).then(
@@ -146,3 +140,92 @@ exports.deleteSauce = (req,res,next)=>{
   )
   
 };
+
+
+
+
+//prova due
+
+exports.likeSauce = (req,res,next) =>{
+  Sauce.findOne({_id:req.params.id}).then(
+    (sauce)=>{
+      if(req.body.like == 1){
+            sauce.likes++;
+            sauce.usersLiked.push(req.body.userId);
+            sauce.save().then(
+              ()=>{
+                res.status(200).json({
+                  message:'you liked the sauce'
+                })
+              }
+            ).catch(
+              (error)=>{
+                res.status(400).json({
+                  error:error
+                })
+              }
+            )
+          
+        }else if(req.body.like == 0){
+          if(sauce.usersLiked.includes(req.body.userId)){
+            const arrayUsersLiked = sauce.usersLiked.indexOf(req.body.userId)
+            sauce.usersLiked.splice(arrayUsersLiked, 1);
+            sauce.likes--;
+            sauce.save().then(
+              ()=>{
+                res.status(200).json({
+                  message:'like removed'
+                })
+              }
+            ).catch(
+              (error)=>{
+                res.status(400).json({
+                  error:error
+                })
+              }
+            )
+          }if(sauce.usersDisliked.includes(req.body.userId)){
+            const arrayUsersDisliked = sauce.usersDisliked.indexOf(req.body.userId)
+            sauce.usersDisliked.splice(arrayUsersDisliked, 1);
+            sauce.dislikes--;
+            sauce.save().then(
+              ()=>{
+                res.status(200).json({
+                  message:'dislike removed'
+                })
+              }
+            ).catch(
+              (error)=>{
+                res.status(400).json({
+                  error:error
+                })
+              }
+            )
+          }
+        }else if(req.body.like == -1){
+          sauce.usersDisliked.push(req.body.userId);
+          sauce.dislikes++;
+          sauce.save().then(
+            ()=>{
+              res.status(201).json({
+                message:'you disliked the sauce'
+              })
+            }
+          ).catch(
+            (error)=>{
+              res.status(400).json({
+                error:error
+              })
+            }
+          )
+        }
+      }
+    
+  ).catch(
+    (error)=>{
+      res.status(400).json({
+        error:error
+      })
+    }
+  )
+}
